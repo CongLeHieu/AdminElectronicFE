@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (document.visibilityState === "hidden") {
+        // Clear localStorage if the page is hidden (indicating close)
+        localStorage.clear();
+      }
+    };
+    // Function to handle the visibilitychange event
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        // Set a flag in sessionStorage to indicate the page is hidden
+        sessionStorage.setItem("isPageHidden", "true");
+      } else {
+        // Remove the flag if the page is visible
+        sessionStorage.removeItem("isPageHidden");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup the event listeners on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          {/* admin role */}
+          <Route element={<RequireAuth allowedRoles={"admin"} />}>
+            <Route path="/admin" element={<NavBar />}></Route>
+            <Route path="/admin/user" element={<UserManagement />}></Route>
+            <Route path="/admin/edit/:id" element={<Edit />}></Route>
+            <Route path="/admin/create" element={<CreateUser />}></Route>
+            <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+          </Route>
+
+          {/* catch all */}
+          <Route path="*" element={<div>There nothing here</div>}></Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
