@@ -16,17 +16,17 @@ export default function UserManagement() {
   const [records, setRecords] = useState(data);
 
   async function fetchData() {
-    const response = await fetch(`${MainAPI}/Admin/users`, {
+    const response = await fetch(`${MainAPI}/Admins/users`, {
       headers: {
         "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        return data.user;
+        return data;
       });
-    console.log(response);
-    setRecords(response);
+    console.log(response.data);
+    setRecords(response.data);
   }
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function UserManagement() {
   function handleDelete(id) {
     try {
       axios
-        .get(`${MainAPI}/admin/delete/${id}`, {
+        .delete(`${MainAPI}/Admins/${id}`, {
           headers: {
             "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
           },
@@ -63,7 +63,7 @@ export default function UserManagement() {
     },
     {
       name: "Role",
-      selector: (row) => row.role_id,
+      selector: (row) => row.role,
       sortable: true,
     },
     {
@@ -72,7 +72,7 @@ export default function UserManagement() {
           <span
             className="action-btn"
             onClick={() => {
-              handleDelete(row.user_id);
+              handleDelete(row.userId);
             }}
           >
             <DeleteIcon color="red" />
@@ -80,7 +80,7 @@ export default function UserManagement() {
           <span
             className="action-btn"
             onClick={() => {
-              nav(`/admin/edit/${row.user_id}`);
+              nav(`/admin/edit/${row.userId}`);
             }}
           >
             <MdModeEdit color="green" />

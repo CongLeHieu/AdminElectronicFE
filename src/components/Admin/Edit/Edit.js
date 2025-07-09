@@ -20,19 +20,17 @@ export default function Edit() {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    fetch(`${MainAPI}/admin/getUser/${id}`, {
+    fetch(`${MainAPI}/Admins/${id}`, {
       headers: {
         "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        const result = data.user[0];
         setUser({
-          username: result.username,
-          email: result.email,
+          username: data.username,
+          email: data.email,
         });
-        setRole(result.role_id);
       });
   }, []);
 
@@ -40,8 +38,8 @@ export default function Edit() {
     e.preventDefault();
     axios
       .put(
-        `${MainAPI}/admin/update/${id}`,
-        { ...user, role_id: role },
+        `${MainAPI}/Admins/${id}`,
+        { ...user, role: role },
         {
           headers: {
             "x-access-token": JSON.parse(localStorage.getItem("accessToken")),
@@ -70,19 +68,21 @@ export default function Edit() {
     <div className="edit-container d-flex">
       <ToastContainer />
       <NavBar />
-      <div className="content">
-        <div className="d-flex w-100 vh-100 justify-content-center align-items-center">
-          <div className="w-50 border bg-secondary text-white p-5">
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="name" className="mb-3">
-                  Tên đăng nhập:{" "}
-                </label>
+      <div className="form-content">
+        <div className="form-wrapper shadow rounded p-5">
+          <h2 className="text-center text-primary mb-4">Edit User</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3 item">
+              <label htmlFor="name" className="form-label fw-bold">
+                Tên đầy đủ
+              </label>
+              <div className="form-control">
                 <input
                   type="text"
+                  id="name"
                   name="name"
-                  className="form-control"
-                  placeholder="Entername"
+                  className="form-control-item"
+                  placeholder="Nhập tên đăng nhập"
                   value={user.username}
                   onChange={(e) => {
                     setUser({
@@ -93,20 +93,23 @@ export default function Edit() {
                 />
               </div>
               {specificError("username") && (
-                <p className="text-danger fw-bold m-0">
+                <div className="text-danger mt-1 fw-bold">
                   {specificError("username").message}
-                </p>
+                </div>
               )}
+            </div>
 
-              <div>
-                <label htmlFor="email" className="my-2">
-                  Email:{" "}
-                </label>
+            <div className="mb-3 item">
+              <label htmlFor="email" className="form-label fw-bold">
+                Email
+              </label>
+              <div className="form-control">
                 <input
-                  type="text"
+                  type="email"
+                  id="email"
                   name="email"
-                  className="form-control"
-                  placeholder="Enteremail"
+                  className="form-control-item"
+                  placeholder="Nhập email"
                   value={user.email}
                   onChange={(e) => {
                     setUser({
@@ -117,35 +120,64 @@ export default function Edit() {
                 />
               </div>
               {specificError("email") && (
-                <p className="text-danger fw-bold m-0">
+                <div className="text-danger mt-1 fw-bold">
                   {specificError("email").message}
-                </p>
+                </div>
               )}
+            </div>
 
-              <div>
-                <label className="my-2">Role:</label>
+            <div className="mb-3 item">
+              <label htmlFor="phone" className="form-label fw-bold">
+                Số điện thoại
+              </label>
+              <div className="form-control">
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  className="form-control-item"
+                  placeholder="Nhập số điện thoại"
+                  value={user.phoneNumber}
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      phoneNumber: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4 item">
+              <label htmlFor="role" className="form-label fw-bold">
+                Vai trò
+              </label>
+              <div className="form-control">
                 <select
-                  className="form-select"
+                  id="role"
+                  className="form-control-item"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                 >
-                  <option value="admin">Admin</option>
                   <option value="staff">Staff</option>
                   <option value="customer">Customer</option>
                 </select>
               </div>
-              <br />
+            </div>
+
+            <div className="action-btn">
               <button
-                className="btn btn-light me-3"
-                onClick={() => {
-                  nav("/admin/user");
-                }}
+                type="button"
+                className="btn btn-outline-secondary me-3"
+                onClick={() => nav("/admin/user")}
               >
                 Hủy
               </button>
-              <button className="btn btn-info">Lưu</button>
-            </form>
-          </div>
+              <button type="submit" className="btn btn-primary">
+                Lưu
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

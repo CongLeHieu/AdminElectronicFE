@@ -1,9 +1,55 @@
-.content {
-  width: 80%;
-  margin: 0 5%;
-  margin-left: 240px;
+.form-content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f3f5;
+  padding: 20px;
+}
 
-  .item {
-    color: black;
-  }
+.form-wrapper {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;  
+  padding: 20px;
+}
+
+.form-wrapper input,
+.form-wrapper select {
+  height: 45px;
+}
+
+.form-wrapper h2 {
+  font-weight: 700;
+}
+
+.form-wrapper .btn {
+  min-width: 100px;
+}
+
+.item{
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.form-control{
+  width: 90%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-control-item{
+  width: 90%; 
+  margin-top: 5px;
+  border-radius: "20px";
+}
+
+.action-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
