@@ -1,6 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect } from "react";
+import Login from "./components/loginPage/login";
+import Dashboard from "./components/Admin/Dashboard/Dashboard.js";
+import Edit from "./components/Admin/Edit/Edit.js";
+import NavBar from "./components/Admin/NavBar/NavBar";
+import UserManagement from "./components/Admin/UserManagement/UserManagement";
+import CreateUser from "./components/Admin/Create/CreateUser.js";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   useEffect(() => {
@@ -35,8 +42,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="" element={<Login />}></Route>
+        </Routes>
+        <Routes>
           {/* admin role */}
-          <Route element={<RequireAuth allowedRoles={"admin"} />}>
+          <Route>
             <Route path="/admin" element={<NavBar />}></Route>
             <Route path="/admin/user" element={<UserManagement />}></Route>
             <Route path="/admin/edit/:id" element={<Edit />}></Route>
